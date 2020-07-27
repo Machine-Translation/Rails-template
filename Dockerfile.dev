@@ -1,0 +1,48 @@
+FROM ruby:2.6.6-alpine
+
+RUN apk add --update \
+  git \
+  bash \
+  build-base \
+  cmake \
+  postgresql-client \
+  postgresql-dev \
+  tzdata \
+  libcurl \
+  libgcc libstdc++ libx11 glib libxrender libxext libintl \
+  libcrypto1.1 libssl1.1 \
+  autoconf \
+  freetds-dev \
+  wget \
+  less \
+  graphviz \
+  fontconfig \
+  freetype \
+  ttf-dejavu \
+  ttf-droid \
+  ttf-freefont \
+  ttf-liberation \
+  ttf-ubuntu-font-family \
+  && apk add --update --no-cache --virtual .build-deps \
+      msttcorefonts-installer \
+  \
+  # Install microsoft fonts
+  && update-ms-fonts \
+  && fc-cache -f \
+  \
+  # Clean up when done
+  && rm -rf /tmp/* \
+  && apk del .build-deps
+
+RUN gem install bundler -v 1.17.3 --no-document
+
+RUN mkdir /app
+WORKDIR /app
+
+ENV RAILS_ENV development
+ENV RAILS_LOG_TO_STDOUT true
+
+COPY . .
+
+EXPOSE 3000
+CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0"]
