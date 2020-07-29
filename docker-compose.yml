@@ -13,7 +13,7 @@ services:
     - bundle-data:/bundle
     environment: 
       BUNDLE_PATH: /bundle/vendor
-      DATABASE_URL: postgres://postgres:password@db/development
+      DATABASE_URL: postgres://postgres:password@db/template_development
       DB_HOST: db 
       DB_PASSWORD: password
       PAGER: more
@@ -25,7 +25,7 @@ services:
     - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: development
+      POSTGRES_DB: template_development
 volumes:
   db-data:
   bundle-data:
